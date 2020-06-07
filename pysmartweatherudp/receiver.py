@@ -193,6 +193,7 @@ class SWReceiver(threading.Thread):
                     ds.wind_bearing_rapid = self._wind_bearing_rapid
                     ds.wind_speed_rapid = self._wind_speed_rapid
                     ds.wind_bearing = self._wind_bearing
+
                     self._precipitation = ds.precipitation
                     self._precipitation_rate = ds.precipitation_rate
                     self._illuminance = ds.illuminance
@@ -211,6 +212,7 @@ class SWReceiver(threading.Thread):
                     # self._lightning_time = ds.lightning_time
                     self._dewpoint = ds.dewpoint
                     self._heat_index = ds.heat_index
+
                     # Calculated Values
                     self._wind_chill = utils.WeatherFunctions.getWindChill(self, self._wind_speed, ds.temperature)
                     ds.wind_chill = self._wind_chill

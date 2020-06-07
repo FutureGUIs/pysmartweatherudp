@@ -154,11 +154,9 @@ class TempestOberservation:
         self.skybattery = 0
         self.solar_radiation = data[11]
         self.wind_direction = data[4]
-
         # Rapid Wind Data
         self.wind_speed_rapid = 0
         self.wind_bearing_rapid = 0
-        
         # Calculated Values
         self.wind_chill = 0
         self.feels_like = 0

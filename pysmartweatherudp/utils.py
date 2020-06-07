@@ -23,8 +23,10 @@ def getDataSet(data, units, ignore_errors=False):
         if not ignore_errors:
             raise
 
+
 class RapidWind:
     """ Return the Rapid Wind data Structure. """
+
     def __init__(self, data, units):
         # Rapid Wind Data
         self.type = 'rapid_wind'
@@ -56,8 +58,10 @@ class RapidWind:
         self.wind_chill = 0
         self.feels_like = 0
 
+
 class SkyOberservation:
     """ Returns the SKY Observation Dataset. """
+
     def __init__(self, data, units):
         # Sky Data
         self.type = 'sky'
@@ -89,14 +93,16 @@ class SkyOberservation:
         self.wind_chill = 0
         self.feels_like = 0
 
+
 class AirOberservation:
     """ Returns the AIR Observation Dataset. """
+
     def __init__(self, data, units):
         # Air Data
         self.type = 'air'
         self.timestamp = data[0]
         self.pressure = UnitConversion.pressure(self, data[1], units)
-        self.temperature = round(data[2],1)
+        self.temperature = round(data[2], 1)
         self.humidity = data[3]
         self.lightning_count = data[4]
         self.lightning_distance = UnitConversion.distance(self, data[5], units)
@@ -122,14 +128,16 @@ class AirOberservation:
         self.wind_chill = 0
         self.feels_like = 0
 
+
 class TempestOberservation:
     """ Returns the AIR Observation Dataset. """
+
     def __init__(self, data, units):
         # Air Data
         self.type = 'tempest'
         self.timestamp = data[0]
         self.pressure = UnitConversion.pressure(self, data[6], units)
-        self.temperature = round(data[7],1)
+        self.temperature = round(data[7], 1)
         self.humidity = data[8]
         self.lightning_count = data[15]
         self.lightning_distance = UnitConversion.distance(self, data[14], units)
@@ -137,7 +145,6 @@ class TempestOberservation:
         self.airbattery = data[16]
         self.dewpoint = WeatherFunctions.getDewPoint(self, data[2], data[3])
         self.heat_index = WeatherFunctions.getHeatIndex(self, data[2], data[3])
-        # Sky Data
         self.illuminance = data[9]
         self.uv = data[10]
         self.precipitation_rate = 0
@@ -155,6 +162,7 @@ class TempestOberservation:
         self.wind_chill = 0
         self.feels_like = 0
 
+
 class UnitConversion:
     """
     Conversion Class to convert between different units.
@@ -165,6 +173,7 @@ class UnitConversion:
     Pressure: mb
     Distance: km
     """
+
     def volume(self, value, unit):
         if unit.lower() == 'imperial':
             # Return value in
@@ -176,49 +185,52 @@ class UnitConversion:
     def pressure(self, value, unit):
         if unit.lower() == 'imperial':
             # Return value inHg
-            return round(value * 0.0295299801647,3)
+            return round(value * 0.0295299801647, 3)
         else:
             # Return value mb
-            return round(value,1)
+            return round(value, 1)
 
     def speed(self, value, unit):
         if unit.lower() == 'imperial':
             # Return value in mi/h
-            return round(value*2.2369362921,1)
+            return round(value*2.2369362921, 1)
         else:
             # Return value in m/s
-            return round(value,1)
+            return round(value, 1)
 
     def distance(self, value, unit):
         if unit.lower() == 'imperial':
             # Return value in mi
-            return round(value*0.621371192,1)
+            return round(value*0.621371192, 1)
         else:
             # Return value in m/s
-            return round(value,0)
+            return round(value, 0)
 
     def wind_direction(self, bearing):
-        direction_array = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW','N']
+        direction_array = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE',
+                           'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW', 'N']
         direction = direction_array[int((bearing + 11.25) / 22.5)]
         return direction
 
+
 class WeatherFunctions:
     """ Weather Specific Math Functions. """
+
     def getDewPoint(self, temperature, humidity):
         """ Returns Dew Point in Celcius """
-        return round(243.04*(math.log(humidity/100)+((17.625*temperature)/(243.04+temperature)))/(17.625-math.log(humidity/100)-((17.625*temperature)/(243.04+temperature))),1)
+        return round(243.04*(math.log(humidity/100)+((17.625*temperature)/(243.04+temperature)))/(17.625-math.log(humidity/100)-((17.625*temperature)/(243.04+temperature))), 1)
 
     def getWindChill(self, wind_speed, temperature):
         """ Returns Wind Chill in Celcius """
         if wind_speed < 1.3:
-            return round(temperature,1)
+            return round(temperature, 1)
         else:
             windKmh = wind_speed * 3.6
             return round(13.12 + (0.6215 * temperature) - (11.37 * math.pow(windKmh, 0.16)) + (0.3965 * temperature * math.pow(windKmh, 0.16)), 1)
 
     def getHeatIndex(self, temperature, humidity):
         """ Returns Heat Index in Celcius """
-        T = temperature * 9/5 + 32 #Convert to Fahrenheit
+        T = temperature * 9/5 + 32  # Convert to Fahrenheit
         RH = humidity
         c1 = -42.379
         c2 = 2.04901523
@@ -257,4 +269,4 @@ class WeatherFunctions:
         elif temperature < 10:
             return wind_chill
         else:
-            return round(temperature,1)
+            return round(temperature, 1)

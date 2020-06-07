@@ -149,14 +149,14 @@ class SWReceiver(threading.Thread):
                     self._solar_radiation = ds.solar_radiation
                     self._skybattery = ds.skybattery
                     self._precipitation_rate_raw = ds.precipitation_rate
-                    self._precipitation_rate = round(self._precipitation_rate_raw * 60,2)
+                    self._precipitation_rate = round(self._precipitation_rate_raw * 60, 2)
                     # Reset the Precipitation at Midnight
                     if datetime.datetime.fromtimestamp(ds.timestamp).strftime('%Y-%m-%d') != self._precipitation_date:
                         self._precipitation_date = datetime.datetime.fromtimestamp(ds.timestamp).strftime('%Y-%m-%d')
                         self._precipitation = 0
-                        self._precipitation_raw =0
+                        self._precipitation_raw = 0
                     self._precipitation_raw = self._precipitation_raw + self._precipitation_rate_raw
-                    self._precipitation = round(self._precipitation_raw,1)
+                    self._precipitation = round(self._precipitation_raw, 1)
                 elif jsondata['type'] == 'obs_air':
                     # RAPID WIND
                     ds.wind_bearing_rapid = self._wind_bearing_rapid
@@ -192,27 +192,27 @@ class SWReceiver(threading.Thread):
                     # TEMPEST
                     ds.wind_bearing_rapid = self._wind_bearing_rapid
                     ds.wind_speed_rapid = self._wind_speed_rapid
-                    ds.illuminance = self._illuminance
-                    ds.uv = self._uv
                     ds.wind_bearing = self._wind_bearing
-                    ds.wind_speed = self._wind_speed
-                    ds.wind_lull = self._wind_lull
-                    ds.wind_gust = self._wind_gust
-                    ds.solar_radiation = self._solar_radiation
                     ds.precipitation = self._precipitation
                     ds.precipitation_rate = self._precipitation_rate
-                    ds.skybattery = self._skybattery
-                    ds.wind_direction = self._wind_direction
+
+                    self._illuminance = ds.illuminance
+                    self._uv = ds.uv
+                    self._solar_radiation = ds.solar_radiation
+                    self._wind_gust = ds.wind_gust
+                    self._wind_lull = ds.wind_lull
+                    self._wind_speed = ds.wind_speed
+                    self._wind_direction = ds.wind_direction
                     self._airbattery = ds.airbattery
                     self._temperature = ds.temperature
                     self._pressure = ds.pressure
                     self._humidity = ds.humidity
                     self._lightning_count = ds.lightning_count
                     self._lightning_distance = ds.lightning_distance
-                    self._lightning_time = ds.lightning_time
+                    # self._lightning_time = ds.lightning_time
                     self._dewpoint = ds.dewpoint
                     self._heat_index = ds.heat_index
-                    
+
                     # Calculated Values
                     self._wind_chill = utils.WeatherFunctions.getWindChill(self, self._wind_speed, ds.temperature)
                     ds.wind_chill = self._wind_chill

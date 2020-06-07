@@ -143,8 +143,8 @@ class TempestOberservation:
         self.lightning_distance = UnitConversion.distance(self, data[14], units)
         # self.lightning_time = datetime.datetime.today().strftime('%Y-%m-%d') if data[4] > 0 else None
         self.airbattery = data[16]
-        self.dewpoint = WeatherFunctions.getDewPoint(self, data[2], data[3])
-        self.heat_index = WeatherFunctions.getHeatIndex(self, data[2], data[3])
+        self.dewpoint = WeatherFunctions.getDewPoint(self, data[7], data[8])
+        self.heat_index = WeatherFunctions.getHeatIndex(self, data[7], data[8])
         self.illuminance = data[9]
         self.uv = data[10]
         self.precipitation_rate = 0

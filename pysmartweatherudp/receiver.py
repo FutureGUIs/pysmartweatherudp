@@ -193,9 +193,9 @@ class SWReceiver(threading.Thread):
                     ds.wind_bearing_rapid = self._wind_bearing_rapid
                     ds.wind_speed_rapid = self._wind_speed_rapid
                     ds.wind_bearing = self._wind_bearing
-                    ds.precipitation = self._precipitation
-                    ds.precipitation_rate = self._precipitation_rate
 
+                    self._precipitation = ds.precipitation
+                    self._precipitation_rate = ds.precipitation_rate
                     self._illuminance = ds.illuminance
                     self._uv = ds.uv
                     self._solar_radiation = ds.solar_radiation

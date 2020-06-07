@@ -130,10 +130,9 @@ class AirOberservation:
 
 
 class TempestOberservation:
-    """ Returns the AIR Observation Dataset. """
+    """ Returns the Tempest Observation Dataset. """
 
     def __init__(self, data, units):
-        # Air Data
         self.type = 'tempest'
         self.timestamp = data[0]
         self.pressure = UnitConversion.pressure(self, data[6], units)
@@ -143,21 +142,23 @@ class TempestOberservation:
         self.lightning_distance = UnitConversion.distance(self, data[14], units)
         # self.lightning_time = datetime.datetime.today().strftime('%Y-%m-%d') if data[4] > 0 else None
         self.airbattery = data[16]
-        self.dewpoint = WeatherFunctions.getDewPoint(self, data[2], data[3])
-        self.heat_index = WeatherFunctions.getHeatIndex(self, data[2], data[3])
+        self.dewpoint = WeatherFunctions.getDewPoint(self, data[7], data[8])
+        self.heat_index = WeatherFunctions.getHeatIndex(self, data[7], data[8])
         self.illuminance = data[9]
         self.uv = data[10]
-        self.precipitation_rate = 0
-        self.wind_speed = 0
+        self.precipitation_rate = data[12]
+        self.wind_speed = data[2]
         self.wind_bearing = data[4]
         self.wind_lull = data[1]
         self.wind_gust = data[3]
         self.skybattery = 0
         self.solar_radiation = data[11]
         self.wind_direction = data[4]
+
         # Rapid Wind Data
         self.wind_speed_rapid = 0
         self.wind_bearing_rapid = 0
+        
         # Calculated Values
         self.wind_chill = 0
         self.feels_like = 0

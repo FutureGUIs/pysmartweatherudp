@@ -1,22 +1,18 @@
 """ Interface to receive UDP packages from a Smart Weather station. """
 
+import datetime
+import json
 # pylint: disable=import-error
 import os
 import select
 import socket
 import sys
-import json
 import threading
 import time
-import datetime
 
 from . import utils
+from .constants import DEFAULT_HOST, DEFAULT_PORT, DEFAULT_UNITS
 
-from .constants import (
-    DEFAULT_HOST,
-    DEFAULT_PORT,
-    DEFAULT_UNITS
-)
 
 class SWReceiver(threading.Thread):
     """ Open a UDP socket to monitor for incoming packets. """
@@ -187,6 +183,36 @@ class SWReceiver(threading.Thread):
                     self._lightning_time = ds.lightning_time
                     self._dewpoint = ds.dewpoint
                     self._heat_index = ds.heat_index
+                    # Calculated Values
+                    self._wind_chill = utils.WeatherFunctions.getWindChill(self, self._wind_speed, ds.temperature)
+                    ds.wind_chill = self._wind_chill
+                    self._feels_like = utils.WeatherFunctions.getFeelsLike(self, self._temperature, self._wind_chill, self._heat_index)
+                    ds.feels_like = self._feels_like
+                elif jsondata['type'] == 'obs_st':
+                    # TEMPEST
+                    ds.wind_bearing_rapid = self._wind_bearing_rapid
+                    ds.wind_speed_rapid = self._wind_speed_rapid
+                    ds.illuminance = self._illuminance
+                    ds.uv = self._uv
+                    ds.wind_bearing = self._wind_bearing
+                    ds.wind_speed = self._wind_speed
+                    ds.wind_lull = self._wind_lull
+                    ds.wind_gust = self._wind_gust
+                    ds.solar_radiation = self._solar_radiation
+                    ds.precipitation = self._precipitation
+                    ds.precipitation_rate = self._precipitation_rate
+                    ds.skybattery = self._skybattery
+                    ds.wind_direction = self._wind_direction
+                    self._airbattery = ds.airbattery
+                    self._temperature = ds.temperature
+                    self._pressure = ds.pressure
+                    self._humidity = ds.humidity
+                    self._lightning_count = ds.lightning_count
+                    self._lightning_distance = ds.lightning_distance
+                    self._lightning_time = ds.lightning_time
+                    self._dewpoint = ds.dewpoint
+                    self._heat_index = ds.heat_index
+                    
                     # Calculated Values
                     self._wind_chill = utils.WeatherFunctions.getWindChill(self, self._wind_speed, ds.temperature)
                     ds.wind_chill = self._wind_chill

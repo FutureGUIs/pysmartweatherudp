@@ -15,6 +15,8 @@ def getDataSet(data, units, ignore_errors=False):
             return SkyOberservation(jsondata['obs'][0], units)
         elif jsondata['type'] == 'obs_air':
             return AirOberservation(jsondata['obs'][0], units)
+        elif jsondata['type'] == 'obs_st':
+            return TempestOberservation(jsondata['obs'][0], units)
         else:
             return None
     except:
@@ -113,6 +115,39 @@ class AirOberservation:
         self.skybattery = 0
         self.solar_radiation = 0
         self.wind_direction = None
+        # Rapid Wind Data
+        self.wind_speed_rapid = 0
+        self.wind_bearing_rapid = 0
+        # Calculated Values
+        self.wind_chill = 0
+        self.feels_like = 0
+
+class TempestOberservation:
+    """ Returns the AIR Observation Dataset. """
+    def __init__(self, data, units):
+        # Air Data
+        self.type = 'tempest'
+        self.timestamp = data[0]
+        self.pressure = UnitConversion.pressure(self, data[6], units)
+        self.temperature = round(data[7],1)
+        self.humidity = data[8]
+        self.lightning_count = data[15]
+        self.lightning_distance = UnitConversion.distance(self, data[14], units)
+        # self.lightning_time = datetime.datetime.today().strftime('%Y-%m-%d') if data[4] > 0 else None
+        self.airbattery = data[16]
+        self.dewpoint = WeatherFunctions.getDewPoint(self, data[2], data[3])
+        self.heat_index = WeatherFunctions.getHeatIndex(self, data[2], data[3])
+        # Sky Data
+        self.illuminance = data[9]
+        self.uv = data[10]
+        self.precipitation_rate = 0
+        self.wind_speed = 0
+        self.wind_bearing = data[4]
+        self.wind_lull = data[1]
+        self.wind_gust = data[3]
+        self.skybattery = 0
+        self.solar_radiation = data[11]
+        self.wind_direction = data[4]
         # Rapid Wind Data
         self.wind_speed_rapid = 0
         self.wind_bearing_rapid = 0
